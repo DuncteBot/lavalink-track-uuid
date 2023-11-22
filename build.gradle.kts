@@ -4,18 +4,19 @@ plugins {
     alias(libs.plugins.lavalink)
 }
 
-group = "org.example"
+group = "com.dunctebot"
 version = "0.1.0"
 
 lavalinkPlugin {
-    name = "plugin-template"
+    name = "track-uuid"
+    path = "$group.track-uuid"
     apiVersion = libs.versions.lavalink.api
     serverVersion = libs.versions.lavalink.server
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
@@ -30,9 +31,17 @@ dependencies {
 }
 
 publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
+    repositories {
+        maven {
+            name = "lavalink"
+            url = uri("https://maven.lavalink.dev/releases")
+            credentials {
+                username = System.getenv("USERNAME")
+                password = System.getenv("PASSWORD")
+            }
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
         }
     }
 }
